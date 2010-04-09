@@ -254,7 +254,7 @@ class WordpressHelper extends AppHelper {
           date("i", strtotime($posts[$i]['date'])),
           date("s", strtotime($posts[$i]['date'])),
           $postname,
-          mysql_result( $posts_query['query'], $i, "id" );
+          mysql_result( $posts_query['query'], $i, "id" )
         );
         // Replace the wordpress tags
         $permalink = str_replace( $wp_permalink_tags, $replace, $this->settings['permalink_structure'] );
