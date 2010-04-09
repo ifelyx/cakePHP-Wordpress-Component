@@ -14,15 +14,18 @@ blog or the ugly ID links.
   
 - Include 'Wordpress' in the helper array in your controller
 
-- The post limit, niceurls, clean and allowed tags can be changed on the fly:    
+- The post limit, niceurls, clean and allowed tags can be changed on the fly:
+    
     $wordpress->limit = 5;
     $wordpress->niceurls = true;
     $wordpress->clean = true;
     $wordpress->allowed_tags = null;
+    
 
 - In your view use the following to grab the posts:
+    
     $posts = $wordpress->getLatest();
-
+    
 
 
 **Note about using permalinks:**
@@ -34,11 +37,11 @@ a short feed of posts on another site.
 
 
 
-AUTHOR
- Henning Stein, www.atomtigerzoo.com
+##### AUTHOR
+Henning Stein, www.atomtigerzoo.com
 
-WEBSITE & REPOSITORY
- http://github.com/atomtigerzoo/cakePHP-Wordpress-Helper
+##### WEBSITE & REPOSITORY
+http://github.com/atomtigerzoo/cakePHP-Wordpress-Helper
 
-LICENSE
- Please see included LICENSE file
+##### LICENSE
+Please see included LICENSE file
