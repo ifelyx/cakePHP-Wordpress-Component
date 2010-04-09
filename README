@@ -3,7 +3,13 @@ cakePHP Wordpress Helper
 Loads the latest posts from a wordpress database and returns them
 for displaying inside a cakePHP application.
 
-Attention:
+
+USAGE
+- coming soon -
+
+
+
+Note about using permalinks:
 Do not use %tag%, %category% or %author% in your permalinks because this 
 Helper won't replace those tags for now. It's a huge database slowdown
 to fetch all the records for categories, tags or authors just to display
@@ -11,6 +17,12 @@ a short feed of posts on another site.
 
 
 
-Author: Henning Stein
-Website: http://www.atomtigerzoo.com
 
+AUTHOR
+ Henning Stein, www.atomtigerzoo.com
+
+WEBSITE & REPOSITORY
+ http://github.com/atomtigerzoo/cakePHP-Wordpress-Helper
+
+LICENSE
+ Please see included LICENSE file
