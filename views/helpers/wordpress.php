@@ -11,45 +11,46 @@
  * a short feed of posts on another site.
  * 
  * 
- * @author    Henning Stein, www.atomtigerzoo.com 
- * @version   0.3
+ * @author    Henning Stein, www.atomtigerzoo.com
+ * @copyright Copyright (c) 2010, Henning Stein
+ * @version   0.3.1
  *  
  */
 class WordpressHelper extends AppHelper {
   
   /**
-   * WP Server
+   * PRIVATE WP Server
    * Enter the domain or IP of your database server here.
    * Mostly it will be 'localhost'. You can add a port if needed
    * by appending ':[PORTNUMBER]' to the domain, name or IP.      
    * 
    * @var string
    */
-  private $wp_server = '';
+  var $__wp_server = '';
   
   /**
-   * WP Database
+   * PRIVATE WP Database
    * Enter the name of the database in which your wordpress resides.
    * 
    * @var string
    */
-  private $wp_database = '';
+  var $__wp_database = '';
   
   /**
-   * WP Username
+   * PRIVATE WP Username
    * The username for the wordpress database.
    * 
    * @var string
    */
-  private $wp_username = '';
+  var $__wp_username = '';
   
   /**
-   * WP Password
+   * PRIVATE WP Password
    * Database password for the wordpress database
    * 
    * @var string   
    */
-  private $wp_password = '';
+  var $__wp_password = '';
   
   /**
    * Limit
@@ -58,7 +59,7 @@ class WordpressHelper extends AppHelper {
    * 
    * @var int
    */
-  public $limit = 5;
+  var $limit = 5;
   
   /**
    * Nice-URLs
@@ -69,7 +70,7 @@ class WordpressHelper extends AppHelper {
    * 
    * @var bool
    */
-  public $niceurls = true;
+  var $niceurls = true;
   
   /**
    * Clean
@@ -81,7 +82,7 @@ class WordpressHelper extends AppHelper {
    * 
    * @var bool
    */
-  public $clean = true;
+  var $clean = true;
   
   /**
    * Allowed Tags
@@ -93,7 +94,7 @@ class WordpressHelper extends AppHelper {
    * 
    * @var string
    */
-  public $allowed_tags = null;
+  var $allowed_tags = null;
   
   
   ###   -----------------   ###
@@ -107,7 +108,7 @@ class WordpressHelper extends AppHelper {
    * 
    * @var array
    */
-  public $settings;
+  var $settings;
   
   
   /**
@@ -115,14 +116,14 @@ class WordpressHelper extends AppHelper {
    * 
    * @return array
    */
-  public function getLatest(){
+  function getLatest() {
     // Get settings
     $this->__get_settings();
     
     // Get posts
     $posts = $this->__query_posts();
     
-    if( $posts && $this->clean ){
+    if ($posts && $this->clean) {
       $posts = $this->__strip_html($posts);
     }
     
@@ -139,13 +140,13 @@ class WordpressHelper extends AppHelper {
    * 
    * @return bool
    */
-  private function __connect(){
-    $db_conn = @mysql_connect($this->wp_server, $this->wp_username, $this->wp_password);
-    if(!$db_conn){
+  function __connect() {
+    $db_conn = @mysql_connect($this->__wp_server, $this->__wp_username, $this->__wp_password);
+    if (!$db_conn) {
       return false;
     }
-    $db_selected = @mysql_select_db($this->wp_database);
-    if(!$db_selected){
+    $db_selected = @mysql_select_db($this->__wp_database);
+    if (!$db_selected) {
       return false;
     }
     
@@ -159,8 +160,8 @@ class WordpressHelper extends AppHelper {
    * 
    * @return array
    */
-  private function __query_posts(){
-    if( !$this->__connect() ){
+  function __query_posts() {
+    if (!$this->__connect()) {
       #debug('Database connection failed. Please check your settings!');
       return false;
     }
@@ -174,7 +175,7 @@ class WordpressHelper extends AppHelper {
     $result['num_rows'] = mysql_numrows($result['query']);
     mysql_close();
     
-    if( $result['num_rows']==0 ){
+    if ($result['num_rows']==0) {
       return false;
     }
     
@@ -194,8 +195,8 @@ class WordpressHelper extends AppHelper {
    *  - permalink_structure
    * 
    */
-  private function __get_settings(){
-    if( !$this->__connect() ){
+  function __get_settings() {
+    if (!$this->__connect()) {
       return false;
     }
     
@@ -207,7 +208,7 @@ class WordpressHelper extends AppHelper {
     $result['num_rows'] = mysql_numrows($result['query']);
     mysql_close();
     
-    for($i=0; $i<$result['num_rows']; $i++){
+    for ($i = 0; $i < $result['num_rows']; $i++) {
       $this->settings[ mysql_result($result['query'], $i, "option_name") ] = mysql_result($result['query'], $i, "option_value");
     }
   }
@@ -217,24 +218,24 @@ class WordpressHelper extends AppHelper {
    * PRIVATE Process Posts
    * Put the posts-results into an array
    * 
-   * @params array posts_query
+   * @param array posts_query
    * @return array
    */
-  private function __process_posts($posts_query){
-    for( $i = 0; $i < $posts_query['num_rows']; $i++ ){
+  function __process_posts($posts_query) {
+    for ($i = 0; $i < $posts_query['num_rows']; $i++) {
       // Texts
-      $posts[$i]['title'] = utf8_encode( mysql_result( $posts_query['query'], $i, "post_title" ) );
-      $posts[$i]['content'] = utf8_encode( mysql_result( $posts_query['query'], $i, "post_content" ) );
+      $posts[$i]['title'] = utf8_encode(mysql_result($posts_query['query'], $i, "post_title"));
+      $posts[$i]['content'] = utf8_encode(mysql_result($posts_query['query'], $i, "post_content"));
       
       // Date
-      $posts[$i]['date'] = mysql_result( $posts_query['query'], $i, "post_date" );
-      $posts[$i]['date'] = date( $this->settings['date_format'], strtotime( $posts[$i]['date'] ) );
+      $posts[$i]['date'] = mysql_result($posts_query['query'], $i, "post_date");
+      $posts[$i]['date'] = date($this->settings['date_format'], strtotime($posts[$i]['date']));
       
       // Postname
-      $postname = mysql_result( $posts_query['query'], $i, "post_name" );
+      $postname = mysql_result($posts_query['query'], $i, "post_name");
       
       // Permalinks
-      if( $this->niceurls ){
+      if ($this->niceurls) {
         $wp_permalink_tags = array(
           "%year%",
           "%monthnum%",
@@ -254,14 +255,14 @@ class WordpressHelper extends AppHelper {
           date("i", strtotime($posts[$i]['date'])),
           date("s", strtotime($posts[$i]['date'])),
           $postname,
-          mysql_result( $posts_query['query'], $i, "id" )
+          mysql_result($posts_query['query'], $i, "id")
         );
         // Replace the wordpress tags
-        $permalink = str_replace( $wp_permalink_tags, $replace, $this->settings['permalink_structure'] );
+        $permalink = str_replace($wp_permalink_tags, $replace, $this->settings['permalink_structure']);
         
         $posts[$i]['link'] = $this->settings['siteurl'] . $permalink;
       }
-      else{
+      else {
         $posts[$i]['link'] = mysql_result( $posts_query['query'], $i, "guid" );
       }
     }
@@ -274,11 +275,11 @@ class WordpressHelper extends AppHelper {
    * PRIVATE Strip HTML
    * Strips the HTML tags from the posts content string
    * 
-   * @params array posts
+   * @param array posts
    * @return array
    */
-  private function __strip_html($posts){
-    foreach($posts as $key => $post){
+  function __strip_html($posts) {
+    foreach ($posts as $key => $post) {
       $posts[$key]['content'] = strip_tags($post['content'], $this->allowed_tags);
     }
     return $posts;

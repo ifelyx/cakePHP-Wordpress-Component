@@ -1,1 +1,8 @@
 Changelog for cakePHP Wordpress Helper
+
+v0.3.1
+  * removed private/public definitions in favor of older PHP versions
+  * small formatting changes
+
+v0.1/0.3
+  * init
