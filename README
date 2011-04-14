@@ -1,18 +1,18 @@
-cakePHP Wordpress Helper
+cakePHP Wordpress Component
 
-The cakePHP Wordpress Helper can be used to fetch posts from a Wordpress 
-database to display them inside a cakePHP application. You can choose how to 
-display the content and are free to use the pretty-urls configured in your
-blog or the ugly ID links.
+The cakePHP Wordpress Component will fetch your posts from your Wordpress blog
+for further use in your cakePHP application.
+It retrieves your posts via mysql, so you need access to the blog-database.
+You have several options of how to display your posts and how the links should
+look (Pretty-URls supported)
 
 
 USAGE
-- Copy the helper file into your application helpers.
+- Clone/Copy the component file into your application components
 
-- Change the server and database settings to your needs directly inside the
-  helper file.
+- Change the server and database settings to your needs in the component
   
-- Include 'Wordpress' in the helper array in your controller
+- Include 'Wordpress' in the components array in your controller
 
 - The post limit, niceurls, clean and allowed tags can be changed on the fly:
     
@@ -22,14 +22,56 @@ USAGE
     $wordpress->allowed_tags = null;
     
 
-- In your view use the following to grab the posts:
-    
-    $posts = $wordpress->getLatest();
-    
+- In your controller use the following to grab the posts:
+
+	$this->Wordpress->limit = 3;
+	$this->Wordpress->niceurls = true;
+	$this->Wordpress->thumbnails = true;
+	$wordpress_posts = $this->Wordpress->getLatest();
+
+
+- If you use caching you could go like this:
+
+	$wordpress_posts = Cache::read( 'wordpress_posts', 'enter_your_key_name_here' );
+	if ( $wordpress_posts === false ) {
+		$this->Wordpress->limit = 3;
+		$this->Wordpress->niceurls = true;
+		$this->Wordpress->thumbnails = true;
+		$wordpress_posts = $this->Wordpress->getLatest();
+		Cache::write('wordpress_posts', $wordpress_posts, 'enter_your_key_name_here');
+	}
+	$this->set('wordpress_posts', $wordpress_posts);
+
+
+- Then in your view maybe:
+
+	if( $wordpress_posts ){
+		foreach($wordpress_posts as $post):
+			// Thumbnail
+			$post_thumbnail = '/path/to/your/placeholder-image.jpg';
+			if(isset($post['thumbnail_100x100'])) {
+				$post_thumbnail = $post['thumbnail_100x100'];
+			}
+
+			echo h($post['title']);
+			echo $post['link'];
+			echo $text->truncate( str_replace("\n", "", $post['content']), 200, array('exact'=>true, 'ending'=>'') );
+			echo '<img src="' . $post_thumbnail . '" width="100" height="100" class="" alt="" />';
+		endforeach;
+	}
+
+
+
+CACHING
+Recommended. If your site has many visitors or you like it fast, think about
+caching the results of the component like shown above, or memcache... or any
+other technique.
+
+
 
 ** Note about using permalinks: **
 Do not use %tag%, %category% or %author% in your permalinks because this 
-Helper won't replace those tags for now. It's a huge database slowdown
+Component won't replace those tags for now. It's a huge database slowdown
 to fetch all the records for categories, tags or authors just to display
 a short feed of posts on another site.
 
@@ -40,7 +82,7 @@ AUTHOR
 Henning Stein, www.atomtigerzoo.com
 
 WEBSITE & REPOSITORY
-http://github.com/atomtigerzoo/cakePHP-Wordpress-Helper
+http://github.com/atomtigerzoo/cakePHP-Wordpress-Component
 
 LICENSE
 Please see included LICENSE file

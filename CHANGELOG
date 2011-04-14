@@ -1,11 +1,19 @@
 Changelog for cakePHP Wordpress Component
 
-Helperv0.3.2
-  * Renamed repo from Helper to Component because it will be a component
+v0.4
+	* Check if thumbnails exist
+	* Proper UTF8 encoding for the database connection
+	* Added the upload directory for dynamic paths to the thumbnails
+	* init of the new component
+	* A component is a much better way to work with posts from wordpress :)
+	* removed the helper
+
+v0.3.2
+	* Renamed repo from Helper to Component because it will be a component
 
 v0.3.1
-  * removed private/public definitions in favor of older PHP versions
-  * small formatting changes
+	* removed private/public definitions in favor of older PHP versions
+	* small formatting changes
 
 v0.1/0.3
-  * init
+	* init
