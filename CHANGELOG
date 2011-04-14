@@ -1,4 +1,7 @@
-Changelog for cakePHP Wordpress Helper
+Changelog for cakePHP Wordpress Component
+
+Helperv0.3.2
+  * Renamed repo from Helper to Component because it will be a component
 
 v0.3.1
   * removed private/public definitions in favor of older PHP versions
